@@ -17,10 +17,11 @@ jobs:
     steps:
        - uses: actions/checkout@v4
        
-       - uses: webfactory/ssh-agent@v0.9.0
-         with:
-           ssh-private-key: ${{ secrets.ID_RSA }}
+       # - uses: webfactory/ssh-agent@v0.9.0
+       #   with:
+       #     ssh-private-key: ${{ secrets.ID_RSA }}
+       
        - run: git config --global user.email "ben02060846@gmail.com"
        - run: git config --global user.name "CI/CD Bot"
-       - run: ls ~/.ssh
-       - run: touch 11.md && git add 11.md && git commit -m "sdf" && git push
+       - run: touch 11.md && git add 11.md && git commit -m "sdf"
+       - run: "mkdir /root/.ssh && echo \"${{ secrets.ID_RSA }}\" >  /root/.ssh/id_rsa && chmod 400 /root/.ssh/id_rsa && git push "
