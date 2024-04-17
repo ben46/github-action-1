@@ -30,5 +30,6 @@ jobs:
           
        - run: git config --global user.email "ben02060846@gmail.com"
        - run: git config --global user.name "CI/CD Bot"
+       - run: git remote set-url --push origin git@github.com:ben46/github-action-1.git
        - run: touch 11.md && git add 11.md && git commit -m "sdf"
        - run: git push
