@@ -20,5 +20,6 @@ jobs:
        - uses: webfactory/ssh-agent@v0.9.0
          with:
            ssh-private-key: ${{ secrets.ID_RSA }}
-           
+       - run: git config --global user.email "Bot@github.com"
+       - run: git config --global user.name "CI/CD Bot"
        - run: touch 11.md && git add 11.md && git commit -m "sdf" && git push
