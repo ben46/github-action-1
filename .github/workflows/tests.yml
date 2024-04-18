@@ -1,22 +1,28 @@
-name: Tests
+name: Parse Tag and Create Variables
 
 on:
   push:
-    paths: 
-      - .github/**
-    branches:   
-      - main
-  pull_request:
+    tags:
+      - 'release/*/*/*'
 
 jobs:
-  unit-tests:
-    name: Unit Tests
+  parse_tag:
     runs-on: ubuntu-latest
     steps:
-      - run: yarn install
-      - uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Extract Network and Project Name
+        id: extract
+        run: |
+          TAG_REF=${GITHUB_REF/refs\/tags\/release\//}
+          IFS='/' read -ra ADDR <<< "$TAG_REF"
+          echo "Network Name: ${ADDR[0]}"
+          echo "Project Name: ${ADDR[1]}"
+          echo "::set-output name=network_name::${ADDR[0]}"
+          echo "::set-output name=project_name::${ADDR[1]}"
+
+      - name: Use Variables
+        run: |
+          echo "Network Name: ${{ steps.extract.outputs.network_name }}"
+          echo "Project Name: ${{ steps.extract.outputs.project_name }}"
